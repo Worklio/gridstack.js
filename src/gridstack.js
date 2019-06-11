@@ -1128,7 +1128,6 @@
             self.grid.cleanNodes();
             self.grid.beginUpdate(node);
             cellWidth = self.cellWidth();
-            var strictCellHeight = Math.ceil(o.outerHeight() / o.attr('data-gs-height'));
             cellHeight = self.container.height() / parseInt(self.container.attr('data-gs-current-height'));
             self.placeholder
                 .attr('data-gs-x', o.attr('data-gs-x'))
@@ -1141,7 +1140,9 @@
             node._beforeDragY = node.y;
 
             self.dd.resizable(el, 'option', 'minWidth', cellWidth * (node.minWidth || 1));
-            self.dd.resizable(el, 'option', 'minHeight', strictCellHeight * (node.minHeight || 1));
+
+            var minHeight = node.minHeight || 1;
+            self.dd.resizable(el, 'option', 'minHeight', self.cellHeight() * minHeight + (minHeight-1) * self.verticalMargin());
 
             if (event.type == 'resizestart') {
                 o.find('.grid-stack-item').trigger('resizestart');
